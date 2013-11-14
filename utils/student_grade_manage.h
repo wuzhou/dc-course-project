@@ -1,15 +1,16 @@
-#define SIDLEN 10
+#define SIDLEN 3
 #define DATAFILE "gradedata.dat"
 
 struct StudentSt
 {
-	char student_id[SIDLEN];
+	int student_id; //length is 3
 	char grade;
+	struct StudentSt *next;
 };
 
-typedef struct StudentSt Sudent;
+typedef struct StudentSt Student;
 
 //Functions for managing students' grades
-int insertGrade(Sudent);
-int updateGrade(Sudent);
-char lookUpGrade(char *);
+int insertGrade(Student *);
+int updateGrade(Student *);
+char lookUpGrade(int);
