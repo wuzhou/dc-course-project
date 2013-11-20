@@ -1,0 +1,14 @@
+#include <stdio.h>
+#include "server_main.h"
+
+void listen_client_lookup(void) {
+  // run_lookup_svc();
+}
+
+void listen_client_update() {
+    run_update_svc();   
+}
+
+void listen_main_server_update() {
+    run_postupdate_svc();
+}

@@ -6,8 +6,8 @@
 int main()
 {
 	Student *student = (Student *)malloc(sizeof(Student));
-	student->student_id = 124;
-	student->grade = 'B';
+	student->student_id = 123;
+	student->grade = 'F';
 //	insertGrade(student);
 	updateGrade(student);
 	char result = lookUpGrade(124);
