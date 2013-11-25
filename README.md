@@ -1,22 +1,25 @@
-#Implemented RPCs:
-##client-server: lookup
-##client-server: update
-##server-server: post_update
+##Implemented RPCs:
+###interface-server: lookup
+###interface-server: update
+###server-server: post_update
+###server-server/interface:post_failure
 
-#Implemented:
-##client (with a CLI interface)
-##server (part of it)
+##Implemented:
+###client (with a CLI interface)
+###server
+###interface
 
-#To be Done:
-##Client-side interface (the "proxy")
-##Server-side status switch (main/backup)
+##To be Done:
+###Test(currently only tested on localhost)
 
-#Demo 
-##run fix_auth_error if rpc register fails
-##steps:
-###run "./server m" in demo/server1
-###run "./server b" in demo/server2
-###(interchangable)
+
+##Demo 
+###Tip: "sudo ./fix_auth_error" if rpc register fails
+###steps:
+###run "./interface localhost localhost" in demo/
+###run "./server m localhost" in demo/svr1/
+###run "./server b localhost" in demo/svr2/
 ###
-###run "./client" in demo
+###run "./client" in demo/
 ###GO!
+

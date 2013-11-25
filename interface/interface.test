@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include "interface.h"
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+void *print_message_function(void*ptr);
+void *handle_client(void);
+char *mypipe = "/tmp/client_interface";
+int main(void) {
+    //set current main server
+    //proc 1->thread1 listens and handle client's request
+    //proc2 ->thread2 listens server's status update
+    printf("before mkfifo\n");
+    //named pipe for communication
+    unlink(mypipe);
+    mkfifo(mypipe, 0777);
+    printf("after mkfifo");
+
+    //thread test
+    pthread_t thread1, thread2;
+
+    int iret1, iret2;
+
+    printf("before create\n");
+    //iret1 = pthread_create(&thread1, NULL, print_message_function, (void*)mypipe);
+    iret2 = pthread_create(&thread2, NULL, print_message_function, (void*)mypipe);
+
+    int fd = open(mypipe, O_WRONLY);
+    write(fd, "001Z", 5);
+    close(fd);
+
+
+    printf("iret=%d\n", iret2);
+    pthread_join(thread1, NULL);
+    pthread_join(thread2, NULL);
+
+
+    exit(0);
+}
+
+void *print_message_function(void* ptr) {
+   // char* message;
+    //message = (char*) ptr;
+    printf("IN SUBTHREAD\n");
+    char buf[1024];
+    int rd_fd = open(mypipe, O_RDONLY);
+    read(rd_fd, buf, 1024);
+    int id;
+    char grade;
+    sscanf(buf,"%3d%c", &id, &grade);
+    printf("read from pipe: %d  %c\n", id, grade);
+    close(rd_fd);
+}
+
+void *handle_client(void) {
+    
+}
+
+

@@ -11,7 +11,7 @@ void test(StudentSt *stu) {
  
     updateGrade(stu);
     do {
-        printf("Server receives student_id=%d\n", stu->student_id);
+        printf("Backup server receives student_id=%d from primary\n", stu->student_id);
         printf("His/Her grade is %c\n", stu->grade);
         stu = stu->next;
     } while(stu != NULL);

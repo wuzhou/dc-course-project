@@ -1,8 +1,0 @@
-#! /bin/bash
-# this is to fix "RPC: authentication error , why = client credential too weak..blahblah.."
-# needs sudo
-
-sudo -i service portmap stop
-sudo -i rpcbind -i -w
-sudo -i service portmap start
-

@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "update_grade.h"
 
 void menu();
 
@@ -13,6 +12,9 @@ int main()
 
 	menu();
 
+    int id;
+    char grade;
+
 	int choice;
 	while(1){
 		printf("Chose a menu number(9 to show menu): ");
@@ -23,23 +25,21 @@ int main()
 			case 1:
 				//do something
                 printf("The student_id to look up: \n");
-                int id;
                 scanf("%3d", &id);
                 getchar();
-                char grade = lookup_grade("localhost", id);
+                char grade = interface_lookup_grade(id);
                 printf("Student %3d has grade %c\n", id, grade);
 				break;
 			case 2:
 				//do somthing
                 printf("Student id: \n");
-                StudentSt* student = (StudentSt*) malloc(sizeof(StudentSt));
-                student->next = NULL;
-                scanf("%3d", &(student->student_id));
+                scanf("%3d", &id);
                 getchar(); //to clear "\n" in buffer
-                printf("Student %3d 's grade is(Pls be nice, prof~):\n", student->student_id);
-                scanf("%c", &(student->grade));
+                printf("Student %3d 's grade is(Pls be nice, prof~):\n", id);
+                scanf("%c", &grade);
                 getchar();  //same
-                UpdateGrade(host, student);
+                //UpdateGrade(host, student); //removed for test nov22
+                interface_update_grade(id, grade);
 				break;
 			case 0:
 				exit(0);

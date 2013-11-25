@@ -13,3 +13,7 @@ void listen_client_update() {
 void listen_mainserver_update() {
     run_postupdate_svc();
 }
+
+void listen_mainserver_failure() {
+    run_postfailure_svc();
+}
