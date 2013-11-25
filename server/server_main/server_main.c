@@ -4,38 +4,36 @@
 #include <fcntl.h>
 #include <signal.h>
 #include <string.h>
+#include <unistd.h>
 
-//process0: main process
-//process1: process running the c/s updategrade server
-//process2: process running the c/s lookupgrade server
-//process2 does not need to communicate with main, it just run
-//process1 takes updated from client and writes updates to pipe
-//main reads from pipe then invoke rpc to post updates to backup server
 int main(int argc, char** argv) {
     const char true = 1;
     const char false = 0;
     const int kMaxReadLength = sizeof(StudentSt);
     char read_buf[kMaxReadLength];
     char peer_server[32] = "";
-    int pid;
+    int listen_updategrade_pid;
+    int listen_lookupgrade_pid;
     int listen_mainupdate_pid;
     char has_new = 0;   //whether has new updates to backup
     int syncfail_count = 0;
     int update_count = 0;   //primary fails after three updates, this is the counter.
 
-
+    //check argument validity
     if(argc != 3) {
         printf("Usage: server [mode] peer_server_address\n");
         printf("mode=p: primary \t mode=b:backup\n");
         return 0;
     }
 
+    //address of the peer server
     strcpy(peer_server, argv[2]);
 
     switch(argv[1][0]) {
         case 'p':
             break;
         case 'b':
+        i_know_its_dirty:         
             if((listen_mainupdate_pid = fork()) == 0) {
                 //in child process
                 listen_mainserver_update();
@@ -43,7 +41,7 @@ int main(int argc, char** argv) {
             else {
                 //in main process
                 listen_mainserver_failure();
-                kill(listen_mainupdate_pid, SIGTERM);
+                kill(listen_mainupdate_pid, SIGKILL);
                 printf("My turn to become primary!\n");
             }
             printf("-----------Main server fail detected-----------\n");
@@ -51,7 +49,7 @@ int main(int argc, char** argv) {
             break;
         default:
             printf("Usage: server [mode]\n");
-            printf("mode=m: main \t mode=b:backup\n");
+            printf("mode=:m primary \t mode=b:backup\n");
             return 0;
     }
 
@@ -68,10 +66,10 @@ int main(int argc, char** argv) {
         return -1;
     }
 
-    if((pid = fork()) == 0) {
+    if((listen_updategrade_pid = fork()) == 0) {
         //in child, process 1
         listen_client_update();
-    } else if((pid = fork()) == 0) {
+    } else if((listen_lookupgrade_pid = fork()) == 0) {
         //in child, process 2
         listen_client_lookup();
     } else {
@@ -117,11 +115,21 @@ int main(int argc, char** argv) {
                     printf("updates sync-ed with bakcup server\n");
                     update_count++;
                     if(update_count >= 3) {
+                        update_count = 0;
+                        syncfail_count = 0; //will become backup, reset counters
+                        kill(listen_lookupgrade_pid, SIGKILL);
+                        kill(listen_updategrade_pid, SIGKILL);
                         post_failure(peer_server);
                         close(pipe_fd[0]);
                         close(pipe_fd[1]);
                         printf("Primary server says goodbye to the evil world.\n\n");
-                        exit(0);
+                        printf("Restarting as backup\n");
+                        printf("Recovering..........Takes 30 secs.\n");
+                        sleep(30);
+                        printf("I'm here as the bakcup!\n");
+                        printf("--------------------------------------------\n\n");
+                        goto i_know_its_dirty;
+                        exit(0);//not reached
                     }
                 } else {
                     //sync failed, pass~will retry next time
