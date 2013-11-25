@@ -10,7 +10,7 @@
 int
 postupdate_prog_1(char *host, StudentSt* student_list)
 {
-	printf("now in postupdate_prog_1\n");
+	//printf("now in postupdate_prog_1\n");
     CLIENT *clnt;
 	int  *result_1;
 	StudentSt  postupdate_1_arg;
@@ -26,17 +26,8 @@ postupdate_prog_1(char *host, StudentSt* student_list)
 	}
 #endif	/* DEBUG */
 
-    /*test
-    StudentSt stu1 = {1, 'A', NULL};
-    StudentSt stu2 = {2, 'B', NULL};
-    StudentSt stu3 = {3, 'D', NULL};
-    stu1.next = &stu2;
-    stu2.next = &stu3;
-    stu3.next = NULL;
-    end of test*/
-    printf("before postupdate_1()\n");
 	result_1 = postupdate_1(student_list, clnt);
-    printf("after postupdate_1()  \n");
+    //printf("after postupdate_1()  \n");
 	if (result_1 == (int *) NULL) {
 		clnt_perror (clnt, "call failed");
         printf("post update call failed\n");

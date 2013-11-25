@@ -3,7 +3,7 @@
  * It was generated using rpcgen.
  */
 
-#include "post_update.h"
+#include "post_failure.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -17,10 +17,10 @@
 #endif
 
 static void
-postupdate_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+postfailure_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		StudentSt postupdate_1_arg;
+		int postfailure_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -31,10 +31,10 @@ postupdate_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case POSTUPDATE:
-		_xdr_argument = (xdrproc_t) xdr_StudentSt;
-		_xdr_result = (xdrproc_t) xdr_int;
-		local = (char *(*)(char *, struct svc_req *)) postupdate_1_svc;
+	case POSTFAILURE:
+		_xdr_argument = (xdrproc_t) xdr_int;
+		_xdr_result = (xdrproc_t) xdr_void;
+		local = (char *(*)(char *, struct svc_req *)) postfailure_1_svc;
 		break;
 
 	default:
@@ -57,22 +57,21 @@ postupdate_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 	return;
 }
 
+void run_postfailure_svc()
 //int
 //main (int argc, char **argv)
-//backup server listens to main server's update request
-int run_postupdate_svc()
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (POSTUPDATE_PROG, POSTUPDATE_VERS);
+	pmap_unset (POSTFAILURE_PROG, POSTFAILURE_VERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, POSTUPDATE_PROG, POSTUPDATE_VERS, postupdate_prog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (POSTUPDATE_PROG, POSTUPDATE_VERS, udp).");
+	if (!svc_register(transp, POSTFAILURE_PROG, POSTFAILURE_VERS, postfailure_prog_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (POSTFAILURE_PROG, POSTFAILURE_VERS, udp).");
 		exit(1);
 	}
 
@@ -81,13 +80,13 @@ int run_postupdate_svc()
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, POSTUPDATE_PROG, POSTUPDATE_VERS, postupdate_prog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (POSTUPDATE_PROG, POSTUPDATE_VERS, tcp).");
+	if (!svc_register(transp, POSTFAILURE_PROG, POSTFAILURE_VERS, postfailure_prog_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (POSTFAILURE_PROG, POSTFAILURE_VERS, tcp).");
 		exit(1);
 	}
 
 	svc_run ();
-	fprintf (stderr, "%s", "svc_run returned");
-	exit (1);
+	//fprintf (stderr, "%s", "svc_run returned");
+	//exit (1);
 	/* NOTREACHED */
 }

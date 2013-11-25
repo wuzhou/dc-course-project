@@ -26,7 +26,7 @@ int insertGrade(Student *student)
 		printf("Can't open %s\n", DATAFILE);
 		return isSuccess;
 	}
-	printf("%d .. %c\n", student->student_id, student->grade);
+	//printf("%d .. %c\n", student->student_id, student->grade);
 	fprintf(fp, "%3d%c", student->student_id, student->grade);
 	
 	fclose(fp);
@@ -85,7 +85,7 @@ int updateGrade(Student *student)
             free(newStudent);       //garbage data and not in the linklist, free here
             break;
         }
-		printf("Reads:\tStudent:%d\tGrade:%c\n", newStudent->student_id, newStudent->grade);
+		//printf("Reads:\tStudent:%d\tGrade:%c\n", newStudent->student_id, newStudent->grade);
 		if(newStudent->student_id == student->student_id){
 			newStudent->grade = student->grade;
 		}
@@ -120,7 +120,7 @@ int updateGrade(Student *student)
 	//newStudent = studentList->next->next;
     newStudent = studentList->next;    //list has a dummy header, next is first element
 	while(newStudent){
-		printf("Writes:\tStudent:%d\tGrade:%c\n", newStudent->student_id, newStudent->grade);
+		//printf("Writes:\tStudent:%d\tGrade:%c\n", newStudent->student_id, newStudent->grade);
 		fprintf(fp, "%03d%c\n", newStudent->student_id, newStudent->grade);
 		newStudent = newStudent->next;
 	}

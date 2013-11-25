@@ -3,7 +3,7 @@
  * It was generated using rpcgen.
  */
 
-#include "lookup_grade.h"
+#include "post_failure.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <rpc/pmap_clnt.h>
@@ -17,10 +17,10 @@
 #endif
 
 static void
-lookupgrade_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
+postfailure_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 {
 	union {
-		int lookupgrade_1_arg;
+		int postfailure_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -31,10 +31,10 @@ lookupgrade_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		(void) svc_sendreply (transp, (xdrproc_t) xdr_void, (char *)NULL);
 		return;
 
-	case LOOKUPGRADE:
+	case POSTFAILURE:
 		_xdr_argument = (xdrproc_t) xdr_int;
-		_xdr_result = (xdrproc_t) xdr_char;
-		local = (char *(*)(char *, struct svc_req *)) lookupgrade_1_svc;
+		_xdr_result = (xdrproc_t) xdr_void;
+		local = (char *(*)(char *, struct svc_req *)) postfailure_1_svc;
 		break;
 
 	default:
@@ -59,19 +59,19 @@ lookupgrade_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 //int
 //main (int argc, char **argv)
-void run_lookupgrade_svc()
+void run_postfailure_svc()
 {
 	register SVCXPRT *transp;
 
-	pmap_unset (LOOKUPGRADE_PROG, LOOKUPGRADE_VERS);
+	pmap_unset (POSTFAILURE_PROG, POSTFAILURE_VERS);
 
 	transp = svcudp_create(RPC_ANYSOCK);
 	if (transp == NULL) {
 		fprintf (stderr, "%s", "cannot create udp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, LOOKUPGRADE_PROG, LOOKUPGRADE_VERS, lookupgrade_prog_1, IPPROTO_UDP)) {
-		fprintf (stderr, "%s", "unable to register (LOOKUPGRADE_PROG, LOOKUPGRADE_VERS, udp).");
+	if (!svc_register(transp, POSTFAILURE_PROG, POSTFAILURE_VERS, postfailure_prog_1, IPPROTO_UDP)) {
+		fprintf (stderr, "%s", "unable to register (POSTFAILURE_PROG, POSTFAILURE_VERS, udp).");
 		exit(1);
 	}
 
@@ -80,8 +80,8 @@ void run_lookupgrade_svc()
 		fprintf (stderr, "%s", "cannot create tcp service.");
 		exit(1);
 	}
-	if (!svc_register(transp, LOOKUPGRADE_PROG, LOOKUPGRADE_VERS, lookupgrade_prog_1, IPPROTO_TCP)) {
-		fprintf (stderr, "%s", "unable to register (LOOKUPGRADE_PROG, LOOKUPGRADE_VERS, tcp).");
+	if (!svc_register(transp, POSTFAILURE_PROG, POSTFAILURE_VERS, postfailure_prog_1, IPPROTO_TCP)) {
+		fprintf (stderr, "%s", "unable to register (POSTFAILURE_PROG, POSTFAILURE_VERS, tcp).");
 		exit(1);
 	}
 
